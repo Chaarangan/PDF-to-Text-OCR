@@ -1,0 +1,11 @@
+# Don't track content of these folders
+Data/
+indic-ocr-tessdata-b7cac70/
+Tests/
+
+
+
+*.zip
+
+# Project exclude paths
+/target/
