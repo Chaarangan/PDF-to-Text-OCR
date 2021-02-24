@@ -15,6 +15,7 @@ public class Writer {
         text=text.replaceAll(" ழு", " மு");
         text=text.replaceAll("ஒ்", "ி");
 
+        System.out.println(text);
 
         text=text.replaceAll(",ர்", ",- ");
         for (int i=0; i<text.length();i++){
@@ -40,33 +41,6 @@ public class Writer {
             }
         }
 
-//        for (int i=0; i<text.length();i++){
-//            if( text.charAt(i)=='ම' && text.charAt(i+1)=='්'&&  "කඛගඝඞඟචඡජඣඤඥඦටඨඩඪණඬතථදධනඳපඵබභමඹයරලවශෂසහළෆ".indexOf(text.charAt(i+2))!=-1 ){
-//                text=text.substring(0,i)+text.charAt(i+2)+"ෙ"+text.substring(i+3);
-//                i++;
-//            }
-//            else if( text.charAt(i)=='3'){
-//                if("කඛගඝඞඟචඡජඣඤඥඦටඨඩඪණඬතථදධනඳපඵබභමඹයරලවශෂසහළෆ".indexOf(text.charAt(i-1))!=-1) {
-//                    text=text.substring(0,i)+"ා"+text.substring(i+1);
-//                }
-//                else if (text.charAt(i-1)=='ෙ'){
-//                    text=text.substring(0,i-1)+"ො"+text.substring(i+1);
-//                }
-//                else if (text.charAt(i-1)=='ේ'){
-//                    text=text.substring(0,i-1)+"ෝ"+text.substring(i+1);
-//                }
-//            }
-//
-//            }
-//        for (int i=1; i<text.length();i++){
-//            if( text.charAt(i)=='3'&&  " 0123456789,-/*".indexOf(text.charAt(i-1))==-1 ) {
-//                text=text.substring(0,i)+"ා"+text.substring(i+1);
-//                i++;
-//            }
-//        }
-////
-//        text=text.replaceAll("டூ", " ே");
-//        text=text.replaceAll("டு", " ெ");
         text=text.replace("ேக", "கே");
         text=text.replace("ேங", "ஙே");
         text=text.replace("ேச", "சே");
@@ -90,11 +64,6 @@ public class Writer {
         text=text.replace("ேஸஷவழளலறரயமபனநதஞஜசடண", "ஸே");
         text=text.replace("ேஷஸஷவழளலறரயமபனநதஞஜசடண", "ஷே");
         text=text.replace("ேஹஷஸஷவழளலறரயமபனநதஞஜசடண", "ஹே");
-
-//ெ
-//
-
-
 
 
         return text;
