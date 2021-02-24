@@ -4,42 +4,17 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class Writer {
-//     ெசவ்வ ாய்க்கிழ ைம, பி.ப. 1.00 மணிக்கு
-// வாய்ழூல வி ைடக்கான வின ாக்கள்
 
     public String edit(String text){
-        text=text.replaceAll(" ","");
-        text=text.replaceAll("ஈ", "ா");
-        text=text.replaceAll(" ா", " ஈ");
-        text=text.replaceAll("ழூ", "மூ");
-        text=text.replaceAll(" ழு", " மு");
-        text=text.replaceAll("ஒ்", "ி");
+//        text=text.replaceAll(" ","");
+//        text=text.replaceAll("ஈ", "ா");
+//        text=text.replaceAll(" ா", " ஈ");
+//        text=text.replaceAll("ழூ", "மூ");
+//        text=text.replaceAll(" ழு", " மு");
+//        text=text.replaceAll("ஒ்", "ி");
+//        text=text.replaceAll(",ர்", ",- ");
 
         System.out.println(text);
-
-        text=text.replaceAll(",ர்", ",- ");
-        for (int i=0; i<text.length();i++){
-            if( text.charAt(i)=='ே'||text.charAt(i)=='ெ'||text.charAt(i)=='ை' ){
-                text=text.substring(0,i)+text.charAt(i+1)+text.charAt(i)+text.substring(i+2);
-                i++;
-            }
-            else if( text.charAt(i)=='ன'&&  "கஙஹஷஸஷவழளலறரயமபனநதஞஜசடண".indexOf(text.charAt(i+1))!=-1 && "்ைேெூுீிாொோௌ".indexOf(text.charAt(i+2))==-1) {
-                text=text.substring(0,i)+text.charAt(i+1)+"ை"+text.substring(i+2);
-                i= i+2;
-            }
-            else if( text.charAt(i)=='\''&&  "கஙஹஷஸஷவழளலறரயமபனநதஞஜசடண".indexOf(text.charAt(i-1))!=-1 ) {
-                text=text.substring(0,i)+"்"+text.substring(i+1);
-                i++;
-            }
-            else if (text.charAt(i)=='ே'&&  "கஙஹஷஸஷவழளலறரயமபனநதஞஜசடண".indexOf(text.charAt(i-1))!=-1 ){
-                text=text.substring(0,i)+text.charAt(i+1)+"ே"+text.substring(i+2);
-                i++;
-            }
-            else if (text.charAt(i)=='ை'&&  "கஙஹஷஸஷவழளலறரயமபனநதஞஜசடண".indexOf(text.charAt(i-1))!=-1 ){
-                text=text.substring(0,i)+text.charAt(i+1)+"ை"+text.substring(i+2);
-                i++;
-            }
-        }
 
         text=text.replace("ேக", "கே");
         text=text.replace("ேங", "ஙே");
@@ -64,7 +39,6 @@ public class Writer {
         text=text.replace("ேஸஷவழளலறரயமபனநதஞஜசடண", "ஸே");
         text=text.replace("ேஷஸஷவழளலறரயமபனநதஞஜசடண", "ஷே");
         text=text.replace("ேஹஷஸஷவழளலறரயமபனநதஞஜசடண", "ஹே");
-
 
         return text;
     }

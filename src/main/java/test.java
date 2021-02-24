@@ -11,7 +11,7 @@ public class test {
         String inputfolder= "C://Users/User/Desktop/PdfToText/pdf";
         String outputfolder="C://Users/User/Desktop/PdfToText/pdf";
 
-        String[] filenames ={"sample.pdf"};
+        String[] filenames ={"1.pdf"};
 
 
         for (String filename:filenames
