@@ -7,9 +7,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -45,40 +46,44 @@ public class OCR extends Thread{
             nu.pattern.OpenCV.loadLocally();
 
             //source image
-            Mat image = Imgcodecs.imread("C://Users/User/Desktop/PdfToText/1.png", Imgcodecs.IMREAD_COLOR);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/True_Image.png", image);
+            Mat in = Imgcodecs.imread("C://Users/User/Desktop/PdfToText/1.png", Imgcodecs.IMREAD_COLOR);
+            // convert to grayscale
+            Mat gray = new Mat(in.size(),CvType.CV_8UC1);
+            if(in.channels()==3){
+                Imgproc.cvtColor(in, gray, Imgproc.COLOR_RGB2GRAY);
+            }else if(in.channels()==1){
+                in.copyTo(gray);
+            }else{
+                throw new IOException("Invalid image type:"+in.type());
+            }
+            // we first blur the gray scale image
+            Mat blurred = new Mat(gray.size(),gray.type());
+            Mat binary4c    = new Mat(gray.size(),gray.type());
+            //Imgproc.GaussianBlur(gray, blurred, new Size(20,20),50);
+            Imgproc.GaussianBlur(gray, blurred, new org.opencv.core.Size (5,5), 2.2, 2);
+            // next we threshold the blurred image
+            float th=128;
+            Imgproc.threshold(blurred,binary4c,th,255,Imgproc.THRESH_BINARY);
 
             //Changing the contrast and brightness
-            Mat dest = new Mat(image.rows(), image.cols(), image.type());
-            image.convertTo(dest, -1, 10, 0);
+            Mat dest = new Mat(binary4c.rows(), binary4c.cols(), binary4c.type());
+            gray.convertTo(dest, -1, 10, 0);
             Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/dest.png", dest);
 
-            // Gray Scale
-            Mat imgGray = new Mat();
-            Imgproc.cvtColor(dest, imgGray, Imgproc.COLOR_BGR2GRAY);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/gray.png", imgGray);
+            Mat mHierarchy = new Mat();
+            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+            Imgproc.findContours(dest, contours, mHierarchy, Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_SIMPLE);
 
-
-            //Adaptive Threshold
-            Mat imgAdaptiveThreshold = new Mat();
-            Imgproc.adaptiveThreshold(imgGray, imgAdaptiveThreshold, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 99, 4);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/adaptive_threshold.png", imgAdaptiveThreshold);
-
-            //smoothing the image
-            Mat colorImg = new Mat();
-            Imgproc.bilateralFilter(imgAdaptiveThreshold, colorImg, 9, 250, 250);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/colorImg.png", colorImg);
-
-            // combine
-            Mat finalImage = new Mat();
-            Core.bitwise_and(colorImg, imgAdaptiveThreshold, finalImage);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/finalImage.png", finalImage);
-
+            //Drawing the Contours
+            Scalar color = new Scalar(0, 0, 255);
+            Imgproc.drawContours(in, contours, -1, color, 2, Imgproc.LINE_8,
+                    mHierarchy, 2, new Point() ) ;
+            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/src.png", in);
 
             System.out.println("page"+page );
 
             try{
-                File imageFile = new File("C://Users/User/Desktop/PdfToText/preprocess/finalImage.png");
+                File imageFile = new File("C://Users/User/Desktop/PdfToText/preprocess/src.png");
                 text += tesseract.doOCR(imageFile);
                 System.out.println("OCR "+page );
             }
