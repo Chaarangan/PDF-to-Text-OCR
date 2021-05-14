@@ -3,31 +3,22 @@ import net.sourceforge.tess4j.TesseractException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 
 public class test {
 
     public static void main(String[] args) throws TesseractException, IOException {
-        String inputfolder= "C://Users/User/Desktop/PdfToText/pdf";
-        String outputfolder="C://Users/User/Desktop/PdfToText/pdf";
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a file Path: ");
+        System.out.flush();
+        String filename = scanner.nextLine();
+        File file = new File(filename);
 
-        String[] filenames ={"1.pdf"};
-
-
-        for (String filename:filenames
-             ) {
-            File file=new File(inputfolder+"/"+filename);
-            OCR ocr=new OCR();
-            String text=ocr.doOCR(file);
-            Writer writer=new Writer();
-            writer.write(writer.edit(text),outputfolder+"/"+filename.substring(0,filename.length()-3)+"txt");
-
-        }
-//2
-
-
-
-
+        OCR ocr=new OCR();
+        String text=ocr.doOCR(file);
+        Writer writer=new Writer();
+        writer.write(writer.edit(text),filename.substring(0,filename.length()-3)+"txt");
     }
 }
 
