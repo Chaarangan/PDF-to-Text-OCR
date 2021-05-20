@@ -1,5 +1,6 @@
 
 import net.sourceforge.tess4j.TesseractException;
+import org.apache.log4j.BasicConfigurator;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,17 +9,18 @@ import java.util.Scanner;
 
 public class test {
 
-    public static void main(String[] args) throws TesseractException, IOException {
+    public static void main(String[] args) throws IOException {
+        BasicConfigurator.configure();
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a file Path: ");
+        System.out.print("Enter your file Path: ");
         System.out.flush();
         String filename = scanner.nextLine();
         File file = new File(filename);
 
         OCR ocr=new OCR();
-        String text=ocr.doOCR(file);
+        String text = ocr.doOCR(file);
         Writer writer=new Writer();
-        writer.write(writer.edit(text),filename.substring(0,filename.length()-3)+"txt");
+        writer.write(text,filename.substring(0,filename.length()-3)+"txt");
     }
 }
 

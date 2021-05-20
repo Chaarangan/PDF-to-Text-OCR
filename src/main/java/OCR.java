@@ -1,5 +1,6 @@
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import nu.pattern.OpenCV;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -26,13 +27,7 @@ public class OCR extends Thread{
         tesseract.setOcrEngineMode(2);
     }
 
-    private byte saturate(double val) {
-        int iVal = (int) Math.round(val);
-        iVal = iVal > 255 ? 255 : (iVal < 0 ? 0 : iVal);
-        return (byte) iVal;
-    }
-
-    public String doOCR(File file) throws TesseractException, IOException {
+    public String doOCR(File file) throws IOException {
 
         String text = "";
 
@@ -41,12 +36,13 @@ public class OCR extends Thread{
 //
         for (int page = 0; page < document.getNumberOfPages(); ++page) {
             BufferedImage bimg = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
-            ImageIO.write(bimg, "png", new File("C://Users/User/Desktop/PdfToText/1.png"));
+            ImageIO.write(bimg, "png", new File("C://Users/User/Desktop/PdfToText/OpenCV/original/"+page + ".png"));
 
-            nu.pattern.OpenCV.loadLocally();
+            OpenCV.loadLocally();
 
             //source image
-            Mat in = Imgcodecs.imread("C://Users/User/Desktop/PdfToText/1.png", Imgcodecs.IMREAD_COLOR);
+            Mat in = Imgcodecs.imread("C://Users/User/Desktop/PdfToText/OpenCV/original/"+page + ".png", Imgcodecs.IMREAD_COLOR);
+
             // convert to grayscale
             Mat gray = new Mat(in.size(),CvType.CV_8UC1);
             if(in.channels()==3){
@@ -56,11 +52,13 @@ public class OCR extends Thread{
             }else{
                 throw new IOException("Invalid image type:"+in.type());
             }
-            // we first blur the gray scale image
+
+            // Blur the gray scale image
             Mat blurred = new Mat(gray.size(),gray.type());
             Mat binary4c    = new Mat(gray.size(),gray.type());
-            //Imgproc.GaussianBlur(gray, blurred, new Size(20,20),50);
-            Imgproc.GaussianBlur(gray, blurred, new org.opencv.core.Size (5,5), 2.2, 2);
+
+            Imgproc.GaussianBlur(gray, blurred, new Size (5,5), 2.2, 2);
+
             // next we threshold the blurred image
             float th=128;
             Imgproc.threshold(blurred,binary4c,th,255,Imgproc.THRESH_BINARY);
@@ -68,7 +66,7 @@ public class OCR extends Thread{
             //Changing the contrast and brightness
             Mat dest = new Mat(binary4c.rows(), binary4c.cols(), binary4c.type());
             gray.convertTo(dest, -1, 10, 0);
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/dest.png", dest);
+            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/OpenCV/brightness-contrast/"+page + ".png", dest);
 
             Mat mHierarchy = new Mat();
             List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -78,12 +76,12 @@ public class OCR extends Thread{
             Scalar color = new Scalar(0, 0, 255);
             Imgproc.drawContours(in, contours, -1, color, 2, Imgproc.LINE_8,
                     mHierarchy, 2, new Point() ) ;
-            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/preprocess/src.png", in);
+            Imgcodecs.imwrite("C://Users/User/Desktop/PdfToText/OpenCV/contours/"+page+".png", in);
 
             System.out.println("page"+page );
 
             try{
-                File imageFile = new File("C://Users/User/Desktop/PdfToText/preprocess/src.png");
+                File imageFile = new File("C://Users/User/Desktop/PdfToText/OpenCV/contours/"+page+".png");
                 text += tesseract.doOCR(imageFile);
                 System.out.println("OCR "+page );
             }
@@ -92,9 +90,8 @@ public class OCR extends Thread{
             }
         }
         document.close();
-        System.out.println("OCRed Successfully...");
+        System.out.println("Recognized Successfully!");
         return text;
     }
-
 }
 
