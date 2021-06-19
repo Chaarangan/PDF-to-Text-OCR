@@ -17,8 +17,8 @@ public class test {
         String filename = scanner.nextLine();
         File file = new File(filename);
 
-        OCR ocr=new OCR();
-        String text = ocr.doOCR(file);
+        ExtractText extractText = new ExtractText();
+        String text = extractText.extractTextFromFile(file);
         Writer writer=new Writer();
         writer.write(text,filename.substring(0,filename.length()-3)+"txt");
     }
