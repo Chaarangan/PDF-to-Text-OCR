@@ -5,7 +5,6 @@ import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,6 @@ public class CheckScannedPdf {
         int numberOfPages = 0;
 
         LinkedList<BufferedImage> bufferedImages = new LinkedList<>();
-
 
         PDDocument doc = PDDocument.load(pdfFile);
 
@@ -50,12 +48,9 @@ public class CheckScannedPdf {
 
         //  pdf pages if equal to the images === scanned pdf ===
         if (numberOfPages == images || images > numberOfPages) {
-
             return bufferedImages;
         } else {
-
             return new LinkedList<>();
-
         }
 
     }

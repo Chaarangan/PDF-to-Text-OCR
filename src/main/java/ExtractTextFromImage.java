@@ -80,7 +80,6 @@ public class ExtractTextFromImage {
         }
 
         ocrResults = ocrResults.trim();
-        // TODO remove the trash that doesn't seem to be words
         return ocrResults;
     }
 }
