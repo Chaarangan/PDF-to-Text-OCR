@@ -6,15 +6,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class DeskewedImage {
-    public static BufferedImage correctSkewness(BufferedImage image) throws IOException {
+public class SkewedImage {
+    public BufferedImage correctSkewness(BufferedImage image) throws IOException {
 
-        final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
+        final double MINIMUM_SKEW_THRESHOLD = 0.05d;
 
         ImageDeskew mImage = new ImageDeskew(image);
         double imageSkewAngle = mImage.getSkewAngle(); // determine skew angle
-        if ((imageSkewAngle > MINIMUM_DESKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_DESKEW_THRESHOLD))) {
-            image = ImageHelper.rotateImage(image, -imageSkewAngle); // deskew image
+        if ((imageSkewAngle > MINIMUM_SKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_SKEW_THRESHOLD))) {
+            image = ImageHelper.rotateImage(image, -imageSkewAngle); // skewed image
         }
         ImageIO.write(image, "png", new File("PdfToText/OpenCV/skewed/"+image.toString() + ".png"));
         return image;

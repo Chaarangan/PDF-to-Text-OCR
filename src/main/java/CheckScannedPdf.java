@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class CheckScannedPdf {
-    public static LinkedList<BufferedImage> getBufferedImages(File pdfFile ) throws IOException {
+    public LinkedList<BufferedImage> getBufferedImages(File pdfFile ) throws IOException {
         int images = 0;
-        int numberOfPages = 0;
+        int numberOfPages;
 
         LinkedList<BufferedImage> bufferedImages = new LinkedList<>();
 

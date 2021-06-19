@@ -22,7 +22,7 @@ public class ExtractTextFromImage {
         tesseract.setDatapath("PdfToText/tessdata");
         tesseract.setOcrEngineMode(2);
     }
-    public static String extractTextFromImage(BufferedImage image) throws IOException {
+    public String extractTextFromImage(BufferedImage image) throws IOException {
 
         BufferedImage grayImage = ImageHelper.convertImageToGrayscale(image);
         ImageIO.write(grayImage, "png", new File("PdfToText/OpenCV/original/"+ image.toString() + ".png"));
@@ -57,7 +57,7 @@ public class ExtractTextFromImage {
         Imgcodecs.imwrite("PdfToText/OpenCV/brightness-contrast/"+ image.toString() + ".png", dest);
 
         Mat mHierarchy = new Mat();
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(dest, contours, mHierarchy, Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_SIMPLE);
 
         //Drawing the Contours
