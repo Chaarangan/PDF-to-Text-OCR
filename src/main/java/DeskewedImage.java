@@ -16,7 +16,7 @@ public class DeskewedImage {
         if ((imageSkewAngle > MINIMUM_DESKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_DESKEW_THRESHOLD))) {
             image = ImageHelper.rotateImage(image, -imageSkewAngle); // deskew image
         }
-        ImageIO.write(image, "png", new File("PdfToText/OpenCV/skewed/"+1 + ".png"));
+        ImageIO.write(image, "png", new File("PdfToText/OpenCV/skewed/"+image.toString() + ".png"));
         return image;
     }
 }

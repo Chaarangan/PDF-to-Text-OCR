@@ -25,11 +25,11 @@ public class ExtractTextFromImage {
     public static String extractTextFromImage(BufferedImage image) throws IOException {
 
         BufferedImage grayImage = ImageHelper.convertImageToGrayscale(image);
-        ImageIO.write(grayImage, "png", new File("PdfToText/OpenCV/original/"+1 + ".png"));
+        ImageIO.write(grayImage, "png", new File("PdfToText/OpenCV/original/"+ image.toString() + ".png"));
         OpenCV.loadLocally();
 
         //source image
-        Mat in = Imgcodecs.imread("PdfToText/OpenCV/original/"+1 + ".png", Imgcodecs.IMREAD_COLOR);
+        Mat in = Imgcodecs.imread("PdfToText/OpenCV/original/"+image.toString() + ".png", Imgcodecs.IMREAD_COLOR);
 
         // convert to grayscale
         Mat gray = new Mat(in.size(), CvType.CV_8UC1);
@@ -54,7 +54,7 @@ public class ExtractTextFromImage {
         //Changing the contrast and brightness
         Mat dest = new Mat(binary4c.rows(), binary4c.cols(), binary4c.type());
         gray.convertTo(dest, -1, 10, 0);
-        Imgcodecs.imwrite("PdfToText/OpenCV/brightness-contrast/"+1 + ".png", dest);
+        Imgcodecs.imwrite("PdfToText/OpenCV/brightness-contrast/"+ image.toString() + ".png", dest);
 
         Mat mHierarchy = new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -64,11 +64,11 @@ public class ExtractTextFromImage {
         Scalar color = new Scalar(0, 0, 255);
         Imgproc.drawContours(in, contours, -1, color, 2, Imgproc.LINE_8,
                 mHierarchy, 2, new Point() ) ;
-        Imgcodecs.imwrite("PdfToText/OpenCV/contours/"+1+".png", in);
+        Imgcodecs.imwrite("PdfToText/OpenCV/contours/"+image.toString()+".png", in);
 
         String ocrResults = null;
         try {
-            File imageFile = new File("PdfToText/OpenCV/contours/"+1+".png");
+            File imageFile = new File("PdfToText/OpenCV/contours/"+image.toString()+".png");
             ocrResults = tesseract.doOCR(grayImage).replaceAll("\\n{2,}", "\n");
 
         } catch (TesseractException e) {
